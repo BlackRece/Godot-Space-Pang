@@ -53,7 +53,19 @@ public partial class Player : Node2D
 		pos.Y = Math.Clamp(pos.Y, 0, AreaBounds.Y);
 		Position = pos;
 
-		// Apply Drag
+		ApplyDrag();
+
+		if (Input.IsActionJustPressed("kb_fire"))
+		{
+			var shot = BulletScene.Instantiate<Shots>();
+			shot.Position = Position;
+			GetParent().AddChild(shot);
+		}
+	}
+	
+	private void ApplyDrag()
+	{
+		// Zero velocity when less than drag
 		if (_currentVelocity.X > -Drag &&
 		    _currentVelocity.X < Drag)
 			_currentVelocity.X = 0;
@@ -69,8 +81,5 @@ public partial class Player : Node2D
 			_currentVelocity.Y = (_currentVelocity.Y > 0)
 				? _currentVelocity.Y - Drag
 				: _currentVelocity.Y + Drag;
-
-		if (Input.IsActionJustPressed("kb_fire"))
-			BulletScene.Instantiate<Shots>();
 	}
 }
