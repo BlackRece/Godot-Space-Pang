@@ -1,29 +1,72 @@
+using System;
 using Godot;
 
 namespace SpacePang.Scripts;
 
 public partial class Player : Node2D
 {
-	[Export] public Vector2 Pos { get; set; } = new Vector2(200, 400);
+	[Export] public Vector2 Pos { get; set; } = new(200, 400);
 	[Export] public int Speed { get; set; } = 500;
+	[Export] public float Drag { get; set; } =  0.1f;
 
-	private Node2D player;
+	[Export] public Vector2 AreaBounds { get; set; } = new(1980, 1080);
+	
+	private Vector2 InputAxis => Input.GetVector(
+		negativeX: "kb_left",
+		positiveX: "kb_right",
+		negativeY: "kb_up",
+		positiveY: "kb_down");
+
+	private Vector2 InputVelocity
+	{
+		get
+		{
+			_currentVelocity.X = Math.Clamp(
+				_currentVelocity.X + InputAxis.X,
+				-MaxVelocity.X,
+				MaxVelocity.X);
+			_currentVelocity.Y = Math.Clamp(
+				_currentVelocity.Y + InputAxis.Y,
+				-MaxVelocity.Y,
+				MaxVelocity.Y);
+			return _currentVelocity;
+		}
+	}
+	
+	[Export] public Vector2 MaxVelocity { get; set; } = new(10, 10);
+	private Vector2 _currentVelocity = Vector2.Zero;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		//player = GetNode().tra
+		Position = Pos;
+		//AreaBounds = GetViewportRect().A
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var axis = Input.GetVector(
-			negativeX: "kb_left",
-			positiveX: "kb_right",
-			negativeY: "kb_up",
-			positiveY: "kb_down");
-		
-		Position = Position + ((axis * Speed) * (float)delta);
+		// Apply velocity
+		var pos = Position + (InputVelocity * Speed) * (float)delta;
+		pos.X = Math.Clamp(pos.X, 0, AreaBounds.X);
+		pos.Y = Math.Clamp(pos.Y, 0, AreaBounds.Y);
+		Position = pos;
+
+		// Apply Drag
+		if (_currentVelocity.X > -Drag &&
+		    _currentVelocity.X < Drag)
+			_currentVelocity.X = 0;
+		else
+			_currentVelocity.X = (_currentVelocity.X > 0)
+				? _currentVelocity.X - Drag
+				: _currentVelocity.X + Drag;
+
+		if (_currentVelocity.Y > -Drag &&
+		    _currentVelocity.Y < Drag)
+			_currentVelocity.Y = 0;
+		else
+			_currentVelocity.Y = (_currentVelocity.Y > 0)
+				? _currentVelocity.Y - Drag
+				: _currentVelocity.Y + Drag;
 	}
 }
