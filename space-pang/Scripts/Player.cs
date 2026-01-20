@@ -8,7 +8,7 @@ public partial class Player : Node2D
 	[Export] public PackedScene BulletScene { get; set; }
 	private Timer _bulletTimer;
 	[Export] public double ShotDelay { get; set; } = 0.1f;
-	[Export] public Vector2 Pos { get; set; } = new(200, 400);
+	[Export] public Vector2 Pos { get; set; } = new(200, 550);
 	[Export] public int Speed { get; set; } = 500;
 	[Export] public float Drag { get; set; } =  0.1f;
 
@@ -44,7 +44,10 @@ public partial class Player : Node2D
 	{
 		_bulletTimer = GetNode<Timer>("ShotClock");
 		_bulletTimer.Stop();
-		
+
+		var pos = Pos;
+		pos.X = AreaBounds.X / 2;
+		Pos = pos;
 		Position = Pos;
 	}
 
