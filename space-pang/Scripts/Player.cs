@@ -5,6 +5,7 @@ namespace SpacePang.Scripts;
 
 public partial class Player : Node2D
 {
+	[Export] public PackedScene BulletScene { get; set; }
 	[Export] public Vector2 Pos { get; set; } = new(200, 400);
 	[Export] public int Speed { get; set; } = 500;
 	[Export] public float Drag { get; set; } =  0.1f;
@@ -68,5 +69,8 @@ public partial class Player : Node2D
 			_currentVelocity.Y = (_currentVelocity.Y > 0)
 				? _currentVelocity.Y - Drag
 				: _currentVelocity.Y + Drag;
+
+		if (Input.IsActionJustPressed("kb_fire"))
+			BulletScene.Instantiate<Shots>();
 	}
 }
