@@ -6,6 +6,8 @@ namespace SpacePang.Scripts;
 public partial class Player : Node2D
 {
 	[Export] public PackedScene BulletScene { get; set; }
+	private Timer _bulletTimer;
+	[Export] public double ShotDelay { get; set; } = 0.1f;
 	[Export] public Vector2 Pos { get; set; } = new(200, 400);
 	[Export] public int Speed { get; set; } = 500;
 	[Export] public float Drag { get; set; } =  0.1f;
@@ -40,8 +42,10 @@ public partial class Player : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_bulletTimer = GetNode<Timer>("ShotClock");
+		_bulletTimer.Stop();
+		
 		Position = Pos;
-		//AreaBounds = GetViewportRect().A
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,11 +59,13 @@ public partial class Player : Node2D
 
 		ApplyDrag();
 
-		if (Input.IsActionJustPressed("kb_fire"))
+		if (_bulletTimer.IsStopped() &&
+		    Input.IsActionPressed("kb_fire"))
 		{
-			var shot = BulletScene.Instantiate<Shots>();
-			shot.Position = Position;
-			GetParent().AddChild(shot);
+			// Reset ShotClock
+			_bulletTimer.Start(ShotDelay);
+
+			SpawnBullet();
 		}
 	}
 	
@@ -81,5 +87,12 @@ public partial class Player : Node2D
 			_currentVelocity.Y = (_currentVelocity.Y > 0)
 				? _currentVelocity.Y - Drag
 				: _currentVelocity.Y + Drag;
+	}
+
+	private void SpawnBullet()
+	{
+		var shot = BulletScene.Instantiate<Shots>();
+		shot.Position = Position;
+		GetParent().AddChild(shot);
 	}
 }
