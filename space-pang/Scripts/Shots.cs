@@ -10,11 +10,14 @@ public partial class Shots : Area2D
 	
 	private Vector2 Velocity => Vector2.Up * Speed;
 	
-	
+	private int _damage = 1;
+	public int Damage => _damage;
+	[Export] public int InitDamage { get; set; } = 1;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
+		_damage = InitDamage;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,7 +32,7 @@ public partial class Shots : Area2D
 	public void OnAreaEntered(Area2D other)
 	{
 		Hide();
-		EmitSignal(SignalName.Hit);
+		//EmitSignal(SignalName.Hit);
 		GD.Print(other.Name);
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace SpacePang.Scripts;
@@ -5,6 +6,19 @@ namespace SpacePang.Scripts;
 public partial class BasicFighter : Area2D
 {
 	private int _hitPoints = 10;
+
+	private int HitPoints
+	{
+		get => _hitPoints;
+		set
+		{
+			_hitPoints -= value;
+			if (_hitPoints <= 0)
+			{
+				// send signal/event to say i'm dead!
+			}
+		}
+	}
 
 	[Export] public int MaxHitPoints { get; set; }
 	
@@ -21,6 +35,14 @@ public partial class BasicFighter : Area2D
 
 	private void OnAreaEntered(Area2D other)
 	{
+		if (other is Shots shot)
+		{
+			TakeDamage(shot.Damage);
+			return;
+		}
+		
 		GD.Print($"hit by {other.Name}");
 	}
+
+	private void TakeDamage(int damage) => _hitPoints -= Math.Abs(damage);
 }
