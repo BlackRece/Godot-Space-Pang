@@ -3,7 +3,7 @@ using Godot;
 
 namespace SpacePang.Scripts;
 
-public partial class Player : Node2D
+public partial class Player : Area2D
 {
 	[Export] public PackedScene BulletScene { get; set; }
 	private Timer _bulletTimer;

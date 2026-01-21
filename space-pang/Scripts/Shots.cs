@@ -2,7 +2,7 @@ using Godot;
 
 namespace SpacePang.Scripts;
 
-public partial class Shots : Node2D
+public partial class Shots : Area2D
 {
 	[Export] public int Speed { get; set; } = 300;
 
@@ -24,5 +24,11 @@ public partial class Shots : Node2D
 
 		if(Position.Y < 0)
 			QueueFree();
+	}
+
+	public void OnAreaEntered()
+	{
+		Hide();
+		EmitSignal(SignalName.Hit);
 	}
 }
