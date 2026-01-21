@@ -4,9 +4,12 @@ namespace SpacePang.Scripts;
 
 public partial class Shots : Node2D
 {
+	[Export] public int Speed { get; set; } = 300;
+
+	[Signal] public delegate void HitEventHandler();
+	
 	private Vector2 Velocity => Vector2.Up * Speed;
 	
-	[Export] public int Speed { get; set; } = 300;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,9 +20,9 @@ public partial class Shots : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if(Position.Y > 0)
-			Position += Velocity * (float)delta;
-		else
+		Position += Velocity * (float)delta;
+
+		if(Position.Y < 0)
 			QueueFree();
 	}
 }
