@@ -26,9 +26,10 @@ public partial class Shots : Area2D
 			QueueFree();
 	}
 
-	public void OnAreaEntered()
+	public void OnAreaEntered(Area2D other)
 	{
 		Hide();
 		EmitSignal(SignalName.Hit);
+		GD.Print(other.Name);
 	}
 }
