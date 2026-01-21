@@ -13,6 +13,8 @@ public partial class Player : Node2D
 	[Export] public float Drag { get; set; } =  0.1f;
 
 	[Export] public Vector2 AreaBounds { get; set; } = new(1980, 1080);
+	[Export] public float BottomOffset { get; set; } = 50;
+	private Rect2 _area;
 	
 	private Vector2 InputAxis => Input.GetVector(
 		negativeX: "kb_left",
@@ -44,9 +46,12 @@ public partial class Player : Node2D
 	{
 		_bulletTimer = GetNode<Timer>("ShotClock");
 		_bulletTimer.Stop();
+		
+		_area = GetViewportRect();
 
-		var pos = Pos;
-		pos.X = AreaBounds.X / 2;
+		var pos = new Vector2(
+			_area.Size.X / 2,
+			_area.Size.Y - BottomOffset);
 		Pos = pos;
 		Position = Pos;
 	}
