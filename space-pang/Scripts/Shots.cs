@@ -31,8 +31,8 @@ public partial class Shots : Area2D
 
 	public void OnAreaEntered(Area2D other)
 	{
-		Hide();
+		QueueFree();
 		//EmitSignal(SignalName.Hit);
-		GD.Print(other.Name);
+		//GD.Print(other.Name);
 	}
 }
