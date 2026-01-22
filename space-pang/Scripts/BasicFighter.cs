@@ -20,7 +20,7 @@ public partial class BasicFighter : Area2D
 		}
 	}
 
-	[Export] public int MaxHitPoints { get; set; }
+	[Export] public int MaxHitPoints { get; set; } = 10;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
