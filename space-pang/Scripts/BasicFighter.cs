@@ -5,6 +5,8 @@ namespace SpacePang.Scripts;
 
 public partial class BasicFighter : Area2D
 {
+	private FuzzyStateMachine _fsm;
+	
 	private int _hitPoints = 10;
 
 	private int HitPoints
@@ -25,6 +27,7 @@ public partial class BasicFighter : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_fsm = new();
 		_hitPoints = MaxHitPoints;
 	}
 
@@ -62,6 +65,7 @@ public partial class BasicFighter : Area2D
         var circleCenter = Position + forward * wanderDistance;
         
         // Generate random point on circle
+        /*
         var randomAngle = (float)(Math.Random * 2 * Math.PI);
         var wanderPoint = circleCenter + new Vector2(
             (float)Math.Cos(randomAngle) * wanderRadius,
@@ -73,11 +77,12 @@ public partial class BasicFighter : Area2D
         
         // Calculate steering force
         var steeringForce = desiredVelocity - Velocity;
-        
         // Clamp to max force
         steeringForce = steeringForce.LimitLength(maxForce);
         
         return steeringForce;
+        */
+        return Vector2.Zero;
     }
 
 	public sealed class Seek
