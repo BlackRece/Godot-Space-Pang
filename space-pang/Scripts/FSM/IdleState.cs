@@ -8,6 +8,13 @@ public class IdleState : State
     {
     }
 
+    /*
+    public override bool ToBeActivated()
+    {
+        _agent.Ma
+    }
+    */
+
     public override void Go(double delta)
     {
         _agent.Rotate(1 * (float)delta);
