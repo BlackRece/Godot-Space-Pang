@@ -80,14 +80,17 @@ public sealed class FuzzyStateMachine
         // activestates = all states with activation value greater than zero
         // inactivestates = all states from allstates not in activestates
         
-        var wasActive = ActiveStates;
+        var wasActive = new List<States>();
+        foreach (var key in ActiveStates.Keys)
+            wasActive.Add(key);
+                    
         ActiveStates.Clear();
         
         foreach (var state in AllStates)
         {
             if (state.Value.ToBeActivated())
             {
-                if (wasActive.ContainsKey(state.Key))
+                if (wasActive.Contains(state.Key))
                     state.Value.Go(delta);
                 else
                     state.Value.Enter();
@@ -96,7 +99,7 @@ public sealed class FuzzyStateMachine
             }
             else
             {
-                if (wasActive.ContainsKey(state.Key))
+                if (wasActive.Contains(state.Key))
                     state.Value.Exit();
             }
         }

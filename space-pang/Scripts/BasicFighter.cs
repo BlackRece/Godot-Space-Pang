@@ -24,6 +24,8 @@ public partial class BasicFighter : Area2D
 		}
 	}
 
+	private decimal _rotation;
+	private decimal Rot => decimal.Round((decimal)RotationDegrees, 2, MidpointRounding.AwayFromZero);
 	[Export] public int MaxHitPoints { get; set; } = 10;
 	
 	// Called when the node enters the scene tree for the first time.
@@ -41,12 +43,20 @@ public partial class BasicFighter : Area2D
 		
 		_fsm = new(this, target, states);
 		_hitPoints = MaxHitPoints;
+
+		_rotation = Rot;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		_fsm.Update(delta);
+
+		if (_rotation != Rot)
+		{
+			_rotation = Rot;
+			GD.Print($"new rotation: {_rotation}");
+		}
 	}
 
 	private void OnAreaEntered(Area2D other)
