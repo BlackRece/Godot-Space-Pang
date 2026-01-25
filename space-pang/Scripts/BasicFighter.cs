@@ -51,14 +51,8 @@ public partial class BasicFighter : Area2D
 	public override void _Process(double delta)
 	{
 		_fsm.Update(delta);
-
-		if (_rotation != Rot)
-		{
-			_rotation = Rot;
-			GD.Print($"new rotation: {_rotation}");
-		}
 	}
-
+	
 	private void OnAreaEntered(Area2D other)
 	{
 		if (other is Shots shot)
