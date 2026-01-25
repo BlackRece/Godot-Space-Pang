@@ -21,17 +21,17 @@ public sealed class FuzzyStateMachine
     private Area2D _agent;
     private Area2D _target;
     
-    public Dictionary<States, State> AllStates { get; private set; }
+    private Dictionary<States, State> AllStates { get; set; }
     private Dictionary<States, State> ActiveStates { get; set; }
     private Dictionary<States, State> InactiveStates { get; set; }
     
-    public FuzzyStateMachine(Area2D agent, Area2D target, States[] states)
+    public FuzzyStateMachine(Area2D agent, Area2D target, Dictionary<States, float> states = null)
     {
         _agent = agent;
         _target = target;
 
-        foreach(var state in states)
-            AddState(state);
+        if(states != null)
+            AddStates(states);
     }
 
     public void AddStates(Dictionary<States, float> states)
@@ -54,6 +54,25 @@ public sealed class FuzzyStateMachine
 
     public void Update(float delta)
     {
+        /*
+         * Psuedo:
+         * get all states
+         * calculate state activation ( negative = not active, positive = active }
+         * list active states
+         * list inactive states
+         * if an active state becomes inactive, then call state's exit()
+         * if an inactive state becomes active, then call state's enter()
+         * if was active is still active, then call Go()
+         * otherwise do nuttin'
+         * TODO:
+         * - 
+         */
         
+        // allstates = all states assigned to this agent, in initial state?
+        // activestates = all states with activation value greater than zero
+        // inactivestates = all states from allstates not in activestates
+        
+        if(AllStates.ContainsKey(States.Chase))
+            AllStates
     }
 }
