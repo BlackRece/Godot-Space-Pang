@@ -46,7 +46,7 @@ public partial class BasicFighter : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		_fsm.Update((float)delta);
+		_fsm.Update(delta);
 	}
 
 	private void OnAreaEntered(Area2D other)

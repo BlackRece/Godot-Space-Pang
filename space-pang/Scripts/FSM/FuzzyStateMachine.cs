@@ -59,7 +59,7 @@ public sealed class FuzzyStateMachine
         _ => new IdleState(_agent, _target)
     };
 
-    public void Update(float delta)
+    public void Update(double delta)
     {
         /*
          * Psuedo:
