@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace SpacePang.Scripts.FSM;
+namespace SpacePang.Scripts.Types;
 
 public sealed record MinMaxValue<T> where T : INumber<T>
 {

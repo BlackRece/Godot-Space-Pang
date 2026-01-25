@@ -72,7 +72,7 @@ public sealed class FuzzyStateMachine
         // activestates = all states with activation value greater than zero
         // inactivestates = all states from allstates not in activestates
         
-        if(AllStates.ContainsKey(States.Chase))
-            AllStates
+        //if(AllStates.ContainsKey(States.Chase))
+            //AllStates
     }
 }
