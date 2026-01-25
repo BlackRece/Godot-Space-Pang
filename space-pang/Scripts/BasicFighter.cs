@@ -28,12 +28,14 @@ public partial class BasicFighter : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		// TODO: pass states in from enemy manager
 		FuzzyStateMachine.States[] states = 
 		[
 			FuzzyStateMachine.States.Idle,
 			FuzzyStateMachine.States.Chase
 		];
 
+		// TODO: pass player in from signal/enemymanager
 		var target = GetTree().Root.GetNode<Area2D>("GameArea/Player");
 		
 		_fsm = new(this, target, states);
