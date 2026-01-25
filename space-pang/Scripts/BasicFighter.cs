@@ -54,7 +54,6 @@ public partial class BasicFighter : Area2D
 		if (other is Shots shot)
 		{
 			TakeDamage(shot.Damage);
-			GD.Print($"HP: {_hitPoints}");
 			return;
 		}
 		
