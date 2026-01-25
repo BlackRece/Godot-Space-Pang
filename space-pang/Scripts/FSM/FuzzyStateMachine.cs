@@ -34,6 +34,12 @@ public sealed class FuzzyStateMachine
             AddState(state);
     }
 
+    public void AddStates(Dictionary<States, float> states)
+    {
+        foreach (var state in states)
+            AddState(state.Key, state.Value);
+    }
+
     public void AddState(States state, float activationRange = 10f)
     {
         AllStates.Add(
