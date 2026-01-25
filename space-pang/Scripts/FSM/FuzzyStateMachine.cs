@@ -24,19 +24,26 @@ public sealed class FuzzyStateMachine
     public Dictionary<States, State> AllStates { get; private set; }
     private Dictionary<States, State> ActiveStates { get; set; }
     private Dictionary<States, State> InactiveStates { get; set; }
-
-    
     
     public FuzzyStateMachine(Area2D agent, Area2D target, States[] states)
     {
         _agent = agent;
         _target = target;
 
-        AllStates = new()
-        {
-            [States.Idle] = new IdleState(_agent, _target),
-            [States.Chase] = new ChaseState(_agent, _target)
-        };
+        foreach(var state in states)
+            AddState(state);
+    }
+
+    public void AddState(States state, float activationRange = 10f)
+    {
+        AllStates.Add(
+            state,
+            state switch
+            {
+                States.Chase => new ChaseState(_agent, _target),
+                _ => new IdleState(_agent, _target)
+            }
+        );
     }
 
     public void Update(float delta)
