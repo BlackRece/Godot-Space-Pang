@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Godot;
 
 namespace SpacePang.Scripts.FSM;
 
@@ -10,6 +11,48 @@ public sealed class FuzzyStateMachine
         public static readonly string WANDER = "WANDER";
         public static readonly string FLEE = "FLEE";
     }
+
+    public enum States
+    {
+        Idle = 0,
+        Chase
+    }
+
+    private Area2D _agent;
+    private Area2D _target;
     
-    public Dictionary<string, State> States { get; private set; }
+    public Dictionary<States, State> AllStates { get; private set; }
+    private Dictionary<States, State> ActiveStates { get; set; }
+    private Dictionary<States, State> InactiveStates { get; set; }
+
+    
+    
+    public FuzzyStateMachine(Area2D agent, Area2D target, States[] states)
+    {
+        _agent = agent;
+        _target = target;
+
+        AllStates = new()
+        {
+            [States.Idle] = new IdleState(_agent, _target),
+            [States.Chase] = new ChaseState(_agent, _target)
+        };
+    }
+
+    public void Update(float delta)
+    {
+        
+    }
+}
+
+public class ChaseState : State
+{
+    public ChaseState(Area2D agent, Area2D target) : base(agent, target)
+    {
+    }
+
+    public override void Go(double delta)
+    {
+        throw new System.NotImplementedException();
+    }
 }
