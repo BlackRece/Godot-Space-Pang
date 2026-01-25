@@ -8,9 +8,6 @@ public class IdleState : State
     {
     }
 
-    // DEBUG: Force this state to always be activated
-    public override bool ToBeActivated() => true;
-
     public override void Go(double delta)
     {
         _agent.Rotate(1 * (float)delta);
