@@ -28,13 +28,22 @@ public partial class BasicFighter : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_fsm = new();
+		FuzzyStateMachine.States[] states = 
+		[
+			FuzzyStateMachine.States.Idle,
+			FuzzyStateMachine.States.Chase
+		];
+
+		var target = GetTree().Root.GetNode<Area2D>("GameArea/Player");
+		
+		_fsm = new(this, target, states);
 		_hitPoints = MaxHitPoints;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		_fsm.Update((float)delta);
 	}
 
 	private void OnAreaEntered(Area2D other)
@@ -85,55 +94,4 @@ public partial class BasicFighter : Area2D
         */
         return Vector2.Zero;
     }
-
-	public sealed class Seek
-	{
-		private Vector2 _origin;
-
-		public Vector2 Origin
-		{
-			get => _origin;
-			set => _origin = value;
-		}
-
-		public Seek(Vector2 origin)
-		{
-			_origin = origin;
-		}
-		
-		public Vector2 Go(Vector2 target) =>
-			(target - _origin).Normalized();
-	}
-
-	public sealed class Wander
-	{
-		// Parameters
-		private readonly float _radius;		// Distance from agent to wander circle
-		private readonly float _distance;	// Distance along forward axis to circle center
-		
-		private readonly Random _rnd = new();
-		private float Rnd => (float)(_rnd.NextSingle() * 2 * Math.PI);
-
-		public Wander(float radius = 100f, float distance = 50f)
-		{
-			_radius = radius;
-			_distance = distance;
-		}
-
-		public Vector2 Go(Vector2 forward, Vector2 position)
-		{
-			// Calculate circle center (in front of agent)
-			var circleCenter = position + forward * _distance;
-        
-			// Generate random point on circle
-			var randomAngle = Rnd;
-			var wanderPoint = circleCenter + new Vector2(
-				(float)Math.Cos(randomAngle) * _radius,
-				(float)Math.Sin(randomAngle) * _radius
-			);
-        
-			// Calculate desired velocity
-			return (wanderPoint - position).Normalized();
-		}
-	}
 }
