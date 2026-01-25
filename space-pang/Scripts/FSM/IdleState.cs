@@ -10,6 +10,7 @@ public class IdleState : State
 
     public override void Go(double delta)
     {
+        _agent.Rotate(1);
         return;
     }
 }

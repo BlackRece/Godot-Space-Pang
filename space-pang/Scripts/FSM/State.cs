@@ -5,7 +5,7 @@ namespace SpacePang.Scripts.FSM;
 public abstract class State
 {
     protected Area2D _agent; // Reference to the enemy using this state
-    private Area2D _target;
+    protected readonly Area2D _target;
     
     public State(Area2D agent, Area2D target)
     {
