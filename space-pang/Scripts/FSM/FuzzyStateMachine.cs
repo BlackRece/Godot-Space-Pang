@@ -21,9 +21,10 @@ public sealed class FuzzyStateMachine
 
     private Area2D _agent;
     private Area2D _target;
-    
-    private Dictionary<States, State> AllStates { get; set; }
-    private Dictionary<States, State> ActiveStates { get; set; }
+
+    private Dictionary<States, State> AllStates { get; set; } = [];
+
+    private Dictionary<States, State> ActiveStates { get; set; } = [];
     //private Dictionary<States, State> InactiveStates { get; set; }
     
     public FuzzyStateMachine(Area2D agent, Area2D target, Dictionary<States, float> states = null)
