@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
@@ -23,7 +24,7 @@ public sealed class FuzzyStateMachine
     
     private Dictionary<States, State> AllStates { get; set; }
     private Dictionary<States, State> ActiveStates { get; set; }
-    private Dictionary<States, State> InactiveStates { get; set; }
+    //private Dictionary<States, State> InactiveStates { get; set; }
     
     public FuzzyStateMachine(Area2D agent, Area2D target, Dictionary<States, float> states = null)
     {
@@ -40,17 +41,23 @@ public sealed class FuzzyStateMachine
             AddState(state.Key, state.Value);
     }
 
-    public void AddState(States state, float activationRange = 10f)
+    public void AddState(States stateType, float activationRange = 10f)
     {
-        AllStates.Add(
-            state,
-            state switch
-            {
-                States.Chase => new ChaseState(_agent, _target),
-                _ => new IdleState(_agent, _target)
-            }
+        var state = CreateState(stateType);
+        state.SetActivation(new MinMaxValue<float>(
+            min: -activationRange,
+            max: activationRange,
+            mid: 0)
         );
+        
+        AllStates.Add(stateType, state);
     }
+
+    private State CreateState(States stateType) => stateType switch
+    {
+        States.Chase => new ChaseState(_agent, _target),
+        _ => new IdleState(_agent, _target)
+    };
 
     public void Update(float delta)
     {
