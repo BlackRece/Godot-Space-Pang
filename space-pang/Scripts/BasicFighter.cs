@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using SpacePang.Scripts.FSM;
 
@@ -29,11 +30,11 @@ public partial class BasicFighter : Area2D
 	public override void _Ready()
 	{
 		// TODO: pass states in from enemy manager
-		FuzzyStateMachine.States[] states = 
-		[
-			FuzzyStateMachine.States.Idle,
-			FuzzyStateMachine.States.Chase
-		];
+		var states = new Dictionary<FuzzyStateMachine.States, float>
+		{
+			[FuzzyStateMachine.States.Idle] = 1f,
+			[FuzzyStateMachine.States.Chase] = 100f
+		};
 
 		// TODO: pass player in from signal/enemymanager
 		var target = GetTree().Root.GetNode<Area2D>("GameArea/Player");

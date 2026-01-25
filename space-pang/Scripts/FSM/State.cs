@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace SpacePang.Scripts.FSM;
@@ -6,6 +7,9 @@ public abstract class State
 {
     protected Area2D _agent; // Reference to the enemy using this state
     protected readonly Area2D _target;
+
+    private float activationLevel = 0f;
+    private float range = 10f;
     
     public State(Area2D agent, Area2D target)
     {
