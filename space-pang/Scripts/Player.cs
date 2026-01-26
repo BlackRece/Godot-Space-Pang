@@ -54,7 +54,8 @@ public partial class Player : Entity
 		}
 		
 		// Apply velocity
-		Velocity = InputVelocity;
+		InputDirection = InputAxis;
+		//Velocity = InputVelocity;
 		base._Process(delta);
 	}
 	
