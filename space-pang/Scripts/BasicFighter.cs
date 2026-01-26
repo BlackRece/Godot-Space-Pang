@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using SpacePang.Scripts.FSM;
+using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts;
 
-public partial class BasicFighter : Area2D
+public partial class BasicFighter : Entity
 {
 	private FuzzyStateMachine _fsm;
 	
