@@ -1,72 +1,49 @@
 using System;
 using Godot;
+using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts;
 
-public partial class Player : Area2D
+public partial class Player : Entity
 {
 	[Export] public PackedScene BulletScene { get; set; }
 	private Timer _bulletTimer;
 	[Export] public double ShotDelay { get; set; } = 0.1f;
-	[Export] public Vector2 Pos { get; set; } = new(200, 550);
-	[Export] public int Speed { get; set; } = 500;
-	[Export] public float Drag { get; set; } =  0.1f;
 
-	[Export] public Vector2 AreaBounds { get; set; } = new(1980, 1080);
 	[Export] public float BottomOffset { get; set; } = 50;
-	private Rect2 _area;
 	
 	private Vector2 InputAxis => Input.GetVector(
 		negativeX: "kb_left",
 		positiveX: "kb_right",
 		negativeY: "kb_up",
 		positiveY: "kb_down");
-
-	private Vector2 InputVelocity
-	{
-		get
-		{
-			_currentVelocity.X = Math.Clamp(
-				_currentVelocity.X + InputAxis.X,
+	
+	private Vector2 InputVelocity =>
+		new (
+			Math.Clamp(
+				Velocity.X + InputAxis.X,
 				-MaxVelocity.X,
-				MaxVelocity.X);
-			_currentVelocity.Y = Math.Clamp(
-				_currentVelocity.Y + InputAxis.Y,
+				MaxVelocity.X),
+			Math.Clamp(
+				Velocity.Y + InputAxis.Y,
 				-MaxVelocity.Y,
-				MaxVelocity.Y);
-			return _currentVelocity;
-		}
-	}
-	
-	[Export] public Vector2 MaxVelocity { get; set; } = new(10, 10);
-	private Vector2 _currentVelocity = Vector2.Zero;
-	
-	// Called when the node enters the scene tree for the first time.
+				MaxVelocity.Y)
+		);
+
 	public override void _Ready()
 	{
 		_bulletTimer = GetNode<Timer>("ShotClock");
 		_bulletTimer.Stop();
 		
-		_area = GetViewportRect();
-
-		var pos = new Vector2(
-			_area.Size.X / 2,
-			_area.Size.Y - BottomOffset);
-		Pos = pos;
-		Position = Pos;
+		var area = GetViewportRect().Size;
+		area.Y -= BottomOffset;
+		area.X /= 2;
+		StartingPos = area;
+		base._Ready();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		// Apply velocity
-		var pos = Position + (InputVelocity * Speed) * (float)delta;
-		pos.X = Math.Clamp(pos.X, 0, AreaBounds.X);
-		pos.Y = Math.Clamp(pos.Y, 0, AreaBounds.Y);
-		Position = pos;
-
-		ApplyDrag();
-
 		if (_bulletTimer.IsStopped() &&
 		    Input.IsActionPressed("kb_fire"))
 		{
@@ -75,28 +52,12 @@ public partial class Player : Area2D
 
 			SpawnBullet();
 		}
+		
+		// Apply velocity
+		Velocity = InputVelocity;
+		base._Process(delta);
 	}
 	
-	private void ApplyDrag()
-	{
-		// Zero velocity when less than drag
-		if (_currentVelocity.X > -Drag &&
-		    _currentVelocity.X < Drag)
-			_currentVelocity.X = 0;
-		else
-			_currentVelocity.X = (_currentVelocity.X > 0)
-				? _currentVelocity.X - Drag
-				: _currentVelocity.X + Drag;
-
-		if (_currentVelocity.Y > -Drag &&
-		    _currentVelocity.Y < Drag)
-			_currentVelocity.Y = 0;
-		else
-			_currentVelocity.Y = (_currentVelocity.Y > 0)
-				? _currentVelocity.Y - Drag
-				: _currentVelocity.Y + Drag;
-	}
-
 	private void SpawnBullet()
 	{
 		var shot = BulletScene.Instantiate<Shots>();

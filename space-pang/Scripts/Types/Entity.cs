@@ -15,6 +15,7 @@ public partial class Entity : Area2D
     [Export] public Vector2 StartingPos { get; set; }
 
     private Rect2 _area;
+    
     public override void _Ready()
     {
         _area = GetViewportRect();
