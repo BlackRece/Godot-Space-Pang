@@ -5,8 +5,11 @@ namespace SpacePang.Scripts.FSM;
 
 public sealed class WanderState : State
 {
+    private readonly Wander _wander;
+    
     public WanderState(Entity agent, Entity target) : base(agent, target)
     {
+        _wander = new Wander();
     }
 
     public override bool ToBeActivated()
@@ -16,9 +19,8 @@ public sealed class WanderState : State
 
     public override void Go(double delta)
     {
-        var wander = new Wander();
         _agent.InputDirection =
-            wander.Go(_agent.Transform.X, _agent.Position);
+            _wander.Go(_agent.Transform.X, _agent.Position);
         
     }
 }
