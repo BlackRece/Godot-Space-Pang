@@ -39,7 +39,8 @@ public partial class BasicFighter : Entity
 		var states = new Dictionary<FuzzyStateMachine.States, float>
 		{
 			//[FuzzyStateMachine.States.Idle] = 1f,
-			[FuzzyStateMachine.States.Chase] = 100f
+			//[FuzzyStateMachine.States.Chase] = 100f
+			[FuzzyStateMachine.States.Wander] = 1f
 		};
 
 		// TODO: pass player in from signal/enemymanager
