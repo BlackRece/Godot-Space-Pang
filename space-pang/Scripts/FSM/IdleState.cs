@@ -1,11 +1,12 @@
 using Godot;
+using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
 public class IdleState : State
 {
     private Vector2 lastPos = new Vector2(); 
-    public IdleState(Area2D agent, Area2D target) : base(agent, target)
+    public IdleState(Entity agent, Entity target) : base(agent, target)
     {
     }
 

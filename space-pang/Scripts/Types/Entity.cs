@@ -8,7 +8,7 @@ public partial class Entity : Area2D
     [Export] public Vector2 MaxVelocity { get; set; } = new(10, 10);
     public Vector2 Velocity { get; set; }
     
-    protected Vector2 InputDirection = Vector2.Zero;
+    public Vector2 InputDirection = Vector2.Zero;
     private Vector2 _currentVelocity = Vector2.Zero;
     [Export] public float Accel = 10f;
     [Export] public float Decel = 5f;
