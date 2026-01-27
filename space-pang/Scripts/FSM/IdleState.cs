@@ -13,11 +13,11 @@ public class IdleState : State
 
     public override bool ToBeActivated()
     {
-        var hasNotMoved = _lastPos.DistanceSquaredTo(_agent.Position) <= 0f;
-        _lastPos = _agent.Position;
+        var hasNotMoved = _lastPos.DistanceSquaredTo(Agent.Position) <= 0f;
+        _lastPos = Agent.Position;
         return hasNotMoved;
     }
 
     public override void Go(double delta) => 
-        _agent.Rotate(1 * (float)delta);
+        Agent.Rotate(1 * (float)delta);
 }

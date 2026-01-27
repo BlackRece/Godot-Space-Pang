@@ -1,22 +1,18 @@
-using System;
-using Godot;
 using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
 public abstract class State
 {
-    protected Entity _agent; // Reference to the enemy using this state
-    protected readonly Entity _target;
+    protected readonly Entity Agent; // Reference to the enemy using this state
+    protected readonly Entity Target;
 
     private MinMaxValue<float> _activation;
-    private float activationLevel = 0f;
-    private float range = 10f;
-    
-    public State(Entity agent, Entity target)
+
+    protected State(Entity agent, Entity target)
     {
-        _agent = agent;
-        _target = target;
+        Agent = agent;
+        Target = target;
     }
     
     public void SetActivation(MinMaxValue<float> activation) => 

@@ -19,8 +19,8 @@ public sealed class WanderState : State
 
     public override void Go(double delta)
     {
-        _agent.InputDirection =
-            _wander.Go(_agent.Transform.X, _agent.Position);
+        Agent.InputDirection =
+            _wander.Go(Agent.Transform.X, Agent.Position);
         
     }
 }

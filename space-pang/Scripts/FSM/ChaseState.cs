@@ -5,20 +5,19 @@ namespace SpacePang.Scripts.FSM;
 
 public sealed class ChaseState : State
 {
+    private readonly Seek _seek;
+    
     public ChaseState(Entity agent, Entity target) : base(agent, target)
     {
+        _seek = new Seek(Agent.Position);
     }
 
-    public override bool ToBeActivated()
-    {
-        //return base.ToBeActivated();
-        var distance = _agent.Position.DistanceSquaredTo(_target.Position);
-        return distance > 1f;
-    }
+    public override bool ToBeActivated() => 
+        Agent.Position.DistanceSquaredTo(Target.Position) > 1f;
 
     public override void Go(double delta)
     {
-        var seek = new Seek(_agent.Position);
-        _agent.InputDirection = seek.Go(_target.Position);
+        Agent.InputDirection =
+            _seek.Go(Target.Position);
     }
 }

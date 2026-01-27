@@ -4,7 +4,7 @@ namespace SpacePang.Scripts.SB;
 
 public sealed class Seek
 {
-    private Vector2 _origin;
+    private readonly Vector2 _origin;
 
     public Seek(Vector2 origin)
     {

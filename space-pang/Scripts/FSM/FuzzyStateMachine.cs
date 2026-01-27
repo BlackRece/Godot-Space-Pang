@@ -5,13 +5,6 @@ namespace SpacePang.Scripts.FSM;
 
 public sealed class FuzzyStateMachine
 {
-    public readonly struct Behaviours
-    {
-        public static readonly string SEEK = "SEEK";
-        public static readonly string WANDER = "WANDER";
-        public static readonly string FLEE = "FLEE";
-    }
-
     public enum States
     {
         Idle = 0,
@@ -25,7 +18,6 @@ public sealed class FuzzyStateMachine
     private Dictionary<States, State> AllStates { get; set; } = [];
 
     private Dictionary<States, State> ActiveStates { get; set; } = [];
-    //private Dictionary<States, State> InactiveStates { get; set; }
     
     public FuzzyStateMachine(Entity agent, Entity target, Dictionary<States, float> states = null)
     {
