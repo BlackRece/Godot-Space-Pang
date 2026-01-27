@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Godot;
 using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
@@ -16,11 +15,12 @@ public sealed class FuzzyStateMachine
     public enum States
     {
         Idle = 0,
-        Chase
+        Chase,
+        Wander
     }
 
-    private Entity _agent;
-    private Entity _target;
+    private readonly Entity _agent;
+    private readonly Entity _target;
 
     private Dictionary<States, State> AllStates { get; set; } = [];
 
@@ -57,6 +57,7 @@ public sealed class FuzzyStateMachine
     private State CreateState(States stateType) => stateType switch
     {
         States.Chase => new ChaseState(_agent, _target),
+        States.Wander => new WanderState(_agent, _target),
         _ => new IdleState(_agent, _target)
     };
 
