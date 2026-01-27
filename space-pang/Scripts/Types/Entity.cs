@@ -5,23 +5,20 @@ namespace SpacePang.Scripts.Types;
 
 public partial class Entity : Area2D
 {
-    [Export] public Vector2 MaxVelocity { get; set; } = new(10, 10);
-    public Vector2 Velocity { get; set; }
-    
-    public Vector2 InputDirection = Vector2.Zero;
-    private Vector2 _currentVelocity = Vector2.Zero;
+    [Export] public Vector2 StartingPos { get; set; }
+
     [Export] public float Accel = 10f;
     [Export] public float Decel = 5f;
     [Export] public float MaxSpeed = 50f;
-    
-    [Export] public Vector2 AreaBounds { get; set; } = new(1980, 1080);
-    [Export] public Vector2 StartingPos { get; set; }
+    public Vector2 InputDirection = Vector2.Zero;
+    private Vector2 _currentVelocity = Vector2.Zero;
 
-    private Rect2 _area;
+    protected Vector2 Area => _areaBounds.Size;
+    private Rect2 _areaBounds;
     
     public override void _Ready()
     {
-        _area = GetViewportRect();
+        _areaBounds = GetViewportRect();
         Position = StartingPos;
         base._Ready();
     }
@@ -44,23 +41,26 @@ public partial class Entity : Area2D
         var pos = Position + (_currentVelocity * MaxSpeed) * (float)delta;
 
         // Check boundaries and reset velocity component if needed
-        if (pos.X <= 0 || pos.X >= AreaBounds.X)
+        if (pos.X <= 0 || pos.X >= Area.X)
             // Reset X velocity if hitting vertical boundaries
             _currentVelocity = _currentVelocity with { X = 0 };
     
-        if (pos.Y <= 0 || pos.Y >= AreaBounds.Y)
+        if (pos.Y <= 0 || pos.Y >= Area.Y)
             // Reset Y velocity if hitting horizontal boundaries
             _currentVelocity = _currentVelocity with { Y = 0 };
         
-        pos.X = Math.Clamp(pos.X, 0, AreaBounds.X);
-        pos.Y = Math.Clamp(pos.Y, 0, AreaBounds.Y);
+        pos.X = Math.Clamp(pos.X, 0, Area.X);
+        pos.Y = Math.Clamp(pos.Y, 0, Area.Y);
         Position = pos;
     }
     
-    private Vector2 MoveTowards(Vector2 current, Vector2 target, float maxDistance)
+    private Vector2 MoveTowards(
+        Vector2 current,
+        Vector2 target, 
+        float maxDistance)
     {
-        Vector2 direction = target - current;
-        float distance = direction.Length();
+        var direction = target - current;
+        var distance = direction.Length();
     
         if (distance <= maxDistance)
             return target; // Reached target
