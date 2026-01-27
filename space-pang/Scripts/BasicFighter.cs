@@ -38,7 +38,7 @@ public partial class BasicFighter : Entity
 		};
 
 		// TODO: pass player in from signal/enemymanager
-		var target = GetTree().Root.GetNode<Area2D>("GameArea/Player");
+		var target = GetTree().Root.GetNode<Entity>("GameArea/Player");
 		
 		_fsm = new(this, target, states);
 		_hitPoints = MaxHitPoints;

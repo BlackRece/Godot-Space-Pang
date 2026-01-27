@@ -19,15 +19,15 @@ public sealed class FuzzyStateMachine
         Chase
     }
 
-    private Area2D _agent;
-    private Area2D _target;
+    private Entity _agent;
+    private Entity _target;
 
     private Dictionary<States, State> AllStates { get; set; } = [];
 
     private Dictionary<States, State> ActiveStates { get; set; } = [];
     //private Dictionary<States, State> InactiveStates { get; set; }
     
-    public FuzzyStateMachine(Area2D agent, Area2D target, Dictionary<States, float> states = null)
+    public FuzzyStateMachine(Entity agent, Entity target, Dictionary<States, float> states = null)
     {
         _agent = agent;
         _target = target;
