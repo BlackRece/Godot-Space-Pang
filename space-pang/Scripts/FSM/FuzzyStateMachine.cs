@@ -63,24 +63,6 @@ public sealed class FuzzyStateMachine
 
     public void Update(double delta)
     {
-        /*
-         * Psuedo:
-         * get all states
-         * calculate state activation ( negative = not active, positive = active }
-         * list active states
-         * list inactive states
-         * if an active state becomes inactive, then call state's exit()
-         * if an inactive state becomes active, then call state's enter()
-         * if was active is still active, then call Go()
-         * otherwise do nuttin'
-         * TODO:
-         * - 
-         */
-        
-        // allstates = all states assigned to this agent, in initial state?
-        // activestates = all states with activation value greater than zero
-        // inactivestates = all states from allstates not in activestates
-        
         var wasActive = new List<States>();
         foreach (var key in ActiveStates.Keys)
             wasActive.Add(key);
