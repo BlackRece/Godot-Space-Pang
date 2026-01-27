@@ -30,6 +30,11 @@ public partial class BasicFighter : Entity
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		// TODO: pass in stats from enemy manager
+		Accel = 5f;
+		Decel = 1f;
+		MaxSpeed = 10f;
+		
 		// TODO: pass states in from enemy manager
 		var states = new Dictionary<FuzzyStateMachine.States, float>
 		{
@@ -54,15 +59,11 @@ public partial class BasicFighter : Entity
 	private void OnAreaEntered(Area2D other)
 	{
 		if (other is Shots shot)
-		{
 			TakeDamage(shot.Damage);
-			return;
-		}
-		
-		GD.Print($"hit by {other.Name}");
 	}
 
-	private void TakeDamage(int damage) => _hitPoints -= Math.Abs(damage);
+	private void TakeDamage(int damage) => 
+		_hitPoints -= Math.Abs(damage);
 	
 	private Vector2 CalculateWander()
     {
