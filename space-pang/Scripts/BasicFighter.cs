@@ -33,7 +33,7 @@ public partial class BasicFighter : Entity
 		// TODO: pass states in from enemy manager
 		var states = new Dictionary<FuzzyStateMachine.States, float>
 		{
-			[FuzzyStateMachine.States.Idle] = 1f,
+			//[FuzzyStateMachine.States.Idle] = 1f,
 			[FuzzyStateMachine.States.Chase] = 100f
 		};
 
@@ -48,6 +48,7 @@ public partial class BasicFighter : Entity
 	public override void _Process(double delta)
 	{
 		_fsm.Update(delta);
+		base._Process(delta);
 	}
 	
 	private void OnAreaEntered(Area2D other)
