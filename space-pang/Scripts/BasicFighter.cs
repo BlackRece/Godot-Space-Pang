@@ -34,13 +34,15 @@ public partial class BasicFighter : Entity
 		Accel = 5f;
 		Decel = 1f;
 		MaxSpeed = 10f;
+
+		StartingPos = new Vector2(Area.X / 2, 50f);
 		
 		// TODO: pass states in from enemy manager
 		var states = new Dictionary<FuzzyStateMachine.States, float>
 		{
 			//[FuzzyStateMachine.States.Idle] = 1f,
-			//[FuzzyStateMachine.States.Chase] = 100f
-			[FuzzyStateMachine.States.Wander] = 1f
+			[FuzzyStateMachine.States.Chase] = 100f
+			//[FuzzyStateMachine.States.Wander] = 1f
 		};
 
 		// TODO: pass player in from signal/enemymanager
@@ -48,6 +50,8 @@ public partial class BasicFighter : Entity
 		
 		_fsm = new(this, target, states);
 		_hitPoints = MaxHitPoints;
+
+		base._Ready();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -13,12 +13,10 @@ public partial class Entity : Area2D
     public Vector2 InputDirection = Vector2.Zero;
     private Vector2 _currentVelocity = Vector2.Zero;
 
-    protected Vector2 Area => _areaBounds.Size;
-    private Rect2 _areaBounds;
+    protected Vector2 Area => GetViewportRect().Size;
     
     public override void _Ready()
     {
-        _areaBounds = GetViewportRect();
         Position = StartingPos;
         base._Ready();
     }
