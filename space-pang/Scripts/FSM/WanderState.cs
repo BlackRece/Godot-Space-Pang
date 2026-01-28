@@ -1,3 +1,5 @@
+using System;
+using Godot;
 using SpacePang.Scripts.SB;
 using SpacePang.Scripts.Types;
 
@@ -19,8 +21,17 @@ public sealed class WanderState : State
 
     public override void Go(double delta)
     {
-        Agent.InputDirection =
+        var desiredVelocity=
             _wander.Go(Agent.Transform.X, Agent.Position);
         
+        // Calculate angle to face the wander point
+        var angleToWander = Mathf.LerpAngle(
+            Agent.Rotation,
+            desiredVelocity.Angle(),
+             Agent.RotateSpeed * (float)delta);
+        
+        // Apply to agent
+        Agent.InputDirection = desiredVelocity;
+        Agent.Rotation = angleToWander;
     }
 }
