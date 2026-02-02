@@ -3,7 +3,7 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public sealed class ChaseState : State
+internal sealed class ChaseState : State
 {
     private readonly Seek _seek;
     

@@ -3,7 +3,7 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public class IdleState : State
+internal class IdleState : State
 {
     private Vector2 _lastPos;
     

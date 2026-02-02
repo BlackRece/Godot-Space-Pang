@@ -2,7 +2,7 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public abstract class State
+internal abstract class State
 {
     protected readonly Entity Agent; // Reference to the enemy using this state
     protected readonly Entity Target;

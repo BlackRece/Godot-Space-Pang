@@ -5,7 +5,7 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public sealed class WanderState : State
+internal sealed class WanderState : State
 {
     private readonly Wander _wander;
     
