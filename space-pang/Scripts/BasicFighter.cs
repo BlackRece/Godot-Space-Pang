@@ -57,7 +57,7 @@ public partial class BasicFighter : Entity
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		_fsm.Update(delta);
+		var result = _fsm.Update(delta);
 		base._Process(delta);
 	}
 	

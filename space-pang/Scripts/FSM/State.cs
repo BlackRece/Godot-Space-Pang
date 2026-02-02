@@ -3,7 +3,7 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-internal abstract class State
+public abstract class State
 {
     protected readonly Entity Agent; // Reference to the enemy using this state
     protected readonly Entity Target;
@@ -35,7 +35,7 @@ internal abstract class State
     {
     }
 
-    internal record Result
+    public record Result
     {
         /// <summary>
         /// Desired Rotation

@@ -53,8 +53,9 @@ public sealed class FuzzyStateMachine
         _ => new IdleState(_agent, _target)
     };
 
-    public void Update(double delta)
+    public State.Result Update(double delta)
     {
+        var result = new State.Result(); 
         var wasActive = new List<States>();
         foreach (var key in ActiveStates.Keys)
             wasActive.Add(key);
@@ -63,10 +64,11 @@ public sealed class FuzzyStateMachine
         
         foreach (var state in AllStates)
         {
+            var temp = new State.Result();
             if (state.Value.ToBeActivated())
             {
                 if (wasActive.Contains(state.Key))
-                    state.Value.Go(delta);
+                    temp = state.Value.Go(delta);
                 else
                     state.Value.Enter();
 
@@ -77,6 +79,14 @@ public sealed class FuzzyStateMachine
                 if (wasActive.Contains(state.Key))
                     state.Value.Exit();
             }
+
+            result.Velocity += temp.Velocity;
+            if (result.Rotation.HasValue)
+                result.Rotation += temp.Rotation ?? 0f;
+            else
+                result.Rotation = temp.Rotation ?? null;
         }
+
+        return result;
     }
 }
