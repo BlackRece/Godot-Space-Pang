@@ -1,3 +1,4 @@
+using Godot;
 using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
@@ -27,10 +28,23 @@ internal abstract class State
     }
     
     // Called each frame while in this state
-    public abstract void Go(double delta);
+    public abstract Result Go(double delta);
     
     // Called when exiting the state
     public virtual void Exit()
     {
+    }
+
+    internal record Result
+    {
+        /// <summary>
+        /// Desired Rotation
+        /// </summary>
+        internal float? Rotation { get; set; } = null;
+        
+        /// <summary>
+        /// Desired Velocity
+        /// </summary>
+        internal Vector2 Velocity { get; set; } = new();
     }
 }

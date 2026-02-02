@@ -18,6 +18,7 @@ internal class IdleState : State
         return hasNotMoved;
     }
 
-    public override void Go(double delta) => 
-        Agent.Rotate(1 * (float)delta);
+    public override Result Go(double delta) => 
+        new() { Rotation = Agent.Rotation + 0.1f };
+            //Agent.Rotate(1 * (float)delta);
 }

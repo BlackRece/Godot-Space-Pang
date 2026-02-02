@@ -15,9 +15,6 @@ internal sealed class ChaseState : State
     public override bool ToBeActivated() => 
         Agent.Position.DistanceSquaredTo(Target.Position) > 1f;
 
-    public override void Go(double delta)
-    {
-        Agent.InputDirection =
-            _seek.Go(Target.Position);
-    }
+    public override Result Go(double delta) => 
+        new() { Velocity = _seek.Go(Target.Position) };
 }

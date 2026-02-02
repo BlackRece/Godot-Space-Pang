@@ -19,7 +19,7 @@ internal sealed class WanderState : State
         return true;
     }
 
-    public override void Go(double delta)
+    public override Result Go(double delta)
     {
         var desiredVelocity=
             _wander.Go(Agent.Transform.X, Agent.Position);
@@ -31,7 +31,12 @@ internal sealed class WanderState : State
              Agent.RotateSpeed * (float)delta);
         
         // Apply to agent
-        Agent.InputDirection = desiredVelocity;
-        Agent.Rotation = angleToWander;
+        return new Result
+        {
+            Velocity = desiredVelocity
+        };
+        
+        //Agent.InputDirection = desiredVelocity;
+        //Agent.Rotation = angleToWander;
     }
 }
