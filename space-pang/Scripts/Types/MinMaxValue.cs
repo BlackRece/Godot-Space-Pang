@@ -44,6 +44,8 @@ public sealed record MinMaxValue<T> where T : INumber<T>
         Current = Mid;
     }
     
+    public static MinMaxValue<T> Empty() => new (T.Zero, T.One, T.Zero);
+    
     /// <summary>
     /// Returns true if Current more than Mid
     /// </summary>

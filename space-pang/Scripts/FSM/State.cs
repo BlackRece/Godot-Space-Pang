@@ -8,7 +8,7 @@ public abstract class State
     protected readonly Entity Agent; // Reference to the enemy using this state
     protected readonly Entity Target;
 
-    private MinMaxValue<float> _activation;
+    private MinMaxValue<float> _activation = MinMaxValue<float>.Empty();
 
     protected State(Entity agent, Entity target)
     {

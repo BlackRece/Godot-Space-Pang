@@ -19,12 +19,12 @@ public sealed class FuzzyStateMachine
 
     private Dictionary<States, State> ActiveStates { get; set; } = [];
     
-    public FuzzyStateMachine(Entity agent, Entity target, Dictionary<States, float> states = null)
+    public FuzzyStateMachine(Entity agent, Entity target, Dictionary<States, float>? states = null)
     {
         _agent = agent;
         _target = target;
 
-        if(states != null)
+        if(states is not null)
             AddStates(states);
     }
 
@@ -55,7 +55,7 @@ public sealed class FuzzyStateMachine
 
     public State.Result? Update(double delta)
     {
-        State.Result result = null; 
+        State.Result? result = null; 
         var wasActive = new List<States>();
         foreach (var key in ActiveStates.Keys)
             wasActive.Add(key);
@@ -64,7 +64,7 @@ public sealed class FuzzyStateMachine
         
         foreach (var state in AllStates)
         {
-            State.Result temp = null;
+            State.Result? temp = null;
             if (state.Value.ToBeActivated())
             {
                 if (wasActive.Contains(state.Key))
