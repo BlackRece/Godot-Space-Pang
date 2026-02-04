@@ -38,20 +38,10 @@ public partial class Entity : Area2D
 
         // Apply velocity
         var pos = Position + (_currentVelocity * MaxSpeed) * (float)delta;
-
-        // Check boundaries and reset velocity component if needed
-        if (pos.X <= 0 || pos.X >= Area.X)
-            // Reset X velocity if hitting vertical boundaries
-            _currentVelocity = _currentVelocity with { X = 0 };
-    
-        if (pos.Y <= 0 || pos.Y >= Area.Y)
-            // Reset Y velocity if hitting horizontal boundaries
-            _currentVelocity = _currentVelocity with { Y = 0 };
         
-        pos.X = Math.Clamp(pos.X, 0, Area.X);
-        pos.Y = Math.Clamp(pos.Y, 0, Area.Y);
-        Position = pos;
-    }
+        Position = BoundaryWrap(pos);
+        //Position = BoundaryLock(pos);
+    }   
     
     private Vector2 MoveTowards(
         Vector2 current,
@@ -65,5 +55,39 @@ public partial class Entity : Area2D
             return target; // Reached target
     
         return current + (direction.Normalized() * maxDistance);
+    }
+
+    private Vector2 BoundaryLock(Vector2 pos)
+    {
+        // Check boundaries and wrap velocity component if needed
+        if (pos.X <= 1 || pos.X >= Area.X - 1)
+            // Reset X velocity if hitting vertical boundaries
+            _currentVelocity = _currentVelocity with { X = 0 };
+
+        if (pos.Y <= 1 || pos.Y >= Area.Y - 1)
+            // Reset Y velocity if hitting horizontal boundaries
+            _currentVelocity = _currentVelocity with { Y = 0 };
+
+        pos.X = Math.Clamp(pos.X, 0, Area.X);
+        pos.Y = Math.Clamp(pos.Y, 0, Area.Y);
+
+        return pos;
+    }
+
+    private Vector2 BoundaryWrap(Vector2 pos)
+    {
+        var result = pos;
+        
+        if (pos.X <= 0)
+            result.X = Area.X;
+        else if (pos.X >= Area.X)
+            result.X = 0;
+
+        if (pos.Y <= 0)
+            result.Y = Area.Y;
+        else if (pos.Y >= Area.Y)
+            result.Y = 0;
+        
+        return result;
     }
 }
