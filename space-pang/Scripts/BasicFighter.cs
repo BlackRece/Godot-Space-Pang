@@ -58,6 +58,9 @@ public partial class BasicFighter : Entity
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if(_hitPoints < 0)
+			QueueFree();
+		;
 		var result = _fsm.Update(delta);
 
 		if (result is not null)
