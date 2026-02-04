@@ -21,6 +21,7 @@ public partial class BasicFighter : Entity
 			if (_hitPoints <= 0)
 			{
 				// send signal/event to say i'm dead!
+				this.QueueFree();
 			}
 		}
 	}
