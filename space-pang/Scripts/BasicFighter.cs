@@ -58,6 +58,14 @@ public partial class BasicFighter : Entity
 	public override void _Process(double delta)
 	{
 		var result = _fsm.Update(delta);
+
+		if (result is not null)
+		{
+			var targetRotation = result.Rotation ?? result.Velocity.Angle();
+			Rotation = Mathf.LerpAngle(Rotation, targetRotation, RotateSpeed * (float)delta);
+			InputDirection = result.Velocity;
+		}
+
 		base._Process(delta);
 	}
 	
