@@ -8,4 +8,9 @@ public abstract class SteeringBehaviour
     public Entity Target { get; set; }
 
     public abstract Vector2 Calculate(Entity target);
+
+    public SteeringBehaviour(Entity target)
+    {
+        Target = target;
+    }
 }
