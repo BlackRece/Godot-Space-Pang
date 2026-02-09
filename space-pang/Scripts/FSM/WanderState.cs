@@ -5,11 +5,11 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-internal sealed class WanderState : State
+internal sealed class WanderState<T> : State<T> where T : Entity
 {
     private readonly Wander _wander;
     
-    public WanderState(Entity agent, Entity target) : base(agent, target)
+    public WanderState(T agent, Entity target) : base(agent, target)
     {
         _wander = new Wander();
     }

@@ -1,25 +1,31 @@
 using System.Collections.Generic;
+using SpacePang.Scripts.SB;
 using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public sealed class FuzzyStateMachine
+public enum FuzzyStates
 {
-    public enum States
-    {
-        Idle = 0,
-        Chase,
-        Wander
-    }
+    Idle = 0,
+    Chase,
+    Wander,
+    Flock
+}
 
-    private readonly Entity _agent;
+public sealed class FuzzyStateMachine<T> where T : Entity
+{
+
+    private readonly T _agent;
     private readonly Entity _target;
 
-    private Dictionary<States, State> AllStates { get; set; } = [];
+    private Dictionary<FuzzyStates, State<T>> AllStates { get; set; } = [];
 
-    private Dictionary<States, State> ActiveStates { get; set; } = [];
+    private Dictionary<FuzzyStates, State<T>> ActiveStates { get; set; } = [];
     
-    public FuzzyStateMachine(Entity agent, Entity target, Dictionary<States, float>? states = null)
+    public FuzzyStateMachine(
+        T agent,
+        Entity target,
+        Dictionary<FuzzyStates, float>? states = null)
     {
         _agent = agent;
         _target = target;
@@ -28,13 +34,13 @@ public sealed class FuzzyStateMachine
             AddStates(states);
     }
 
-    public void AddStates(Dictionary<States, float> states)
+    public void AddStates(Dictionary<FuzzyStates, float> states)
     {
         foreach (var state in states)
             AddState(state.Key, state.Value);
     }
 
-    public void AddState(States stateType, float activationRange = 10f)
+    public void AddState(FuzzyStates stateType, float activationRange = 10f)
     {
         var state = CreateState(stateType);
         state.SetActivation(new MinMaxValue<float>(
@@ -46,17 +52,18 @@ public sealed class FuzzyStateMachine
         AllStates.Add(stateType, state);
     }
 
-    private State CreateState(States stateType) => stateType switch
+    private State<T> CreateState(FuzzyStates stateType) => stateType switch
     {
-        States.Chase => new ChaseState(_agent, _target),
-        States.Wander => new WanderState(_agent, _target),
-        _ => new IdleState(_agent, _target)
+        FuzzyStates.Chase => new ChaseState<T>(_agent, _target),
+        FuzzyStates.Wander => new WanderState<T>(_agent, _target),
+        FuzzyStates.Flock => new Flocking<T>(_agent, _target),
+        _ => new IdleState<T>(_agent, _target)
     };
 
-    public State.Result? Update(double delta)
+    public State<T>.Result? Update(double delta)
     {
-        State.Result? result = null; 
-        var wasActive = new List<States>();
+        State<T>.Result? result = null; 
+        var wasActive = new List<FuzzyStates>();
         foreach (var key in ActiveStates.Keys)
             wasActive.Add(key);
                     
@@ -64,7 +71,7 @@ public sealed class FuzzyStateMachine
         
         foreach (var state in AllStates)
         {
-            State.Result? temp = null;
+            State<T>.Result? temp = null;
             if (state.Value.ToBeActivated())
             {
                 if (wasActive.Contains(state.Key))

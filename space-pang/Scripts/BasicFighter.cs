@@ -8,7 +8,12 @@ namespace SpacePang.Scripts;
 
 public partial class BasicFighter : Entity
 {
-	private FuzzyStateMachine _fsm;
+	private FuzzyStateMachine<BasicFighter> _fsm;
+	private Detector<BasicFighter> _detector;
+	public List<Entity> Neighbours => _detector.GetNeighbours();
+	
+	// radius in pixels?
+	[Export] public float DetectionRadius { get; set; } = 50;
 	
 	private int _hitPoints = 10;
 
@@ -37,19 +42,22 @@ public partial class BasicFighter : Entity
 		MaxSpeed = 10f;
 
 		StartingPos = new Vector2(Area.X / 2, 50f);
+
+		_detector = new Detector<BasicFighter>(this, DetectionRadius);
 		
 		// TODO: pass states in from enemy manager
-		var states = new Dictionary<FuzzyStateMachine.States, float>
+		var states = new Dictionary<FuzzyStates, float>
 		{
 			//[FuzzyStateMachine.States.Idle] = 1f,
 			//[FuzzyStateMachine.States.Chase] = 100f
-			[FuzzyStateMachine.States.Wander] = 1f
+			//[FuzzyStates.Wander] = 1f
+			[FuzzyStates.Flock] = 1f
 		};
 
 		// TODO: pass player in from signal/enemymanager
 		var target = GetTree().Root.GetNode<Entity>("GameArea/Player");
 		
-		_fsm = new(this, target, states);
+		_fsm = new FuzzyStateMachine<BasicFighter>(this, target, states);
 		_hitPoints = MaxHitPoints;
 
 		base._Ready();

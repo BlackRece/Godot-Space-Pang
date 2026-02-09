@@ -3,11 +3,11 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-internal class IdleState : State
+internal class IdleState<T> : State<T> where T : Entity
 {
     private Vector2 _lastPos;
     
-    public IdleState(Entity agent, Entity target) : base(agent, target)
+    public IdleState(T agent, Entity target) : base(agent, target)
     {
     }
 

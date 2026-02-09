@@ -3,14 +3,14 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-public abstract class State
+public abstract class State<T> where T : Entity
 {
-    protected readonly Entity Agent; // Reference to the enemy using this state
+    protected readonly T Agent; // Reference to the enemy using this state
     protected readonly Entity Target;
 
     private MinMaxValue<float> _activation = MinMaxValue<float>.Empty();
 
-    protected State(Entity agent, Entity target)
+    protected State(T agent, Entity target)
     {
         Agent = agent;
         Target = target;

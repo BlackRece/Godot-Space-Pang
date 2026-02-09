@@ -3,18 +3,18 @@ using SpacePang.Scripts.Types;
 
 namespace SpacePang.Scripts.FSM;
 
-internal sealed class ChaseState : State
+internal sealed class ChaseState<T> : State<T> where T : Entity
 {
     private readonly Seek _seek;
     
-    public ChaseState(Entity agent, Entity target) : base(agent, target)
+    public ChaseState(T agent, Entity target) : base(agent, target)
     {
-        _seek = new Seek(Agent.Position);
+        _seek = new Seek(Agent);
     }
 
     public override bool ToBeActivated() => 
         Agent.Position.DistanceSquaredTo(Target.Position) > 1f;
 
     public override Result Go(double delta) => 
-        new() { Velocity = _seek.Go(Target.Position) };
+        new() { Velocity = _seek.Calculate(Target) };
 }

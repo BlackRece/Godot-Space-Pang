@@ -7,20 +7,13 @@ namespace SpacePang.Scripts.Types;
 public partial class Entity : Area2D
 {
     [Export] public Vector2 StartingPos { get; set; }
-
-    // radius in pixels?
-    [Export] public float DetectionRadius { get; set; } = 50;
     
     [Export] public float RotateSpeed = 1f;
     [Export] public float Accel = 10f;
     [Export] public float Decel = 5f;
     [Export] public float MaxSpeed = 50f;
 
-    private Detector _detector;
 
-    public List<Entity> GetNeighbours() =>
-        _detector.GetNeighbours<Entity>();
-    
     public Vector2 InputDirection = Vector2.Zero;
     private Vector2 _currentVelocity = Vector2.Zero;
 
@@ -29,7 +22,6 @@ public partial class Entity : Area2D
     public override void _Ready()
     {
         Position = StartingPos;
-        _detector = new Detector(this, DetectionRadius);
         base._Ready();
     }
 
@@ -105,7 +97,7 @@ public partial class Entity : Area2D
     
 }
 
-internal sealed class Detector
+internal sealed class Detector<T> where T : Entity
 {
     private readonly CollisionShape2D _shape2d;
     private readonly CircleShape2D _circle2d;
@@ -119,7 +111,7 @@ internal sealed class Detector
     
     private readonly List<Entity> _neighbors = [];
 
-    public Detector(Entity owner, float radius = 10)
+    public Detector(T owner, float radius = 10)
     {
         _circle2d = new CircleShape2D();
         _circle2d.Radius = radius;
@@ -132,14 +124,14 @@ internal sealed class Detector
         owner.AreaExited += OnAreaExited;
     }
 
-    public List<T> GetNeighbours<T>() where T : Entity
+    public List<Entity> GetNeighbours()
     {
-        var neighbours = new List<T>();
+        var neighbours = new List<Entity>();
 
         foreach (var neighbor in _neighbors)
         {
             if (neighbor is T)
-                neighbours.Add((T)neighbor);
+                neighbours.Add(neighbor);
         }
             
         return neighbours;
@@ -147,7 +139,7 @@ internal sealed class Detector
 
     private void OnAreaEntered(Area2D area)
     {
-        if (area is not Entity entity)
+        if (area is not T entity)
             return;
         
         if (!_neighbors.Contains(entity))
@@ -156,9 +148,7 @@ internal sealed class Detector
 
     private void OnAreaExited(Area2D area)
     {
-        if (area is not Entity entity)
-            return;
-
-        _neighbors.Remove(entity);
+        if (area is T entity)
+            _neighbors.Remove(entity);
     }
 }
