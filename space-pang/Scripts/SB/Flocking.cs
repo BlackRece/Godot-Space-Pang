@@ -18,6 +18,8 @@ public class Flocking<T> : State<T> where T : Entity
         _separate = new Separate(target);
     }
 
+    public override bool ToBeActivated() => true;
+
     public override Result Go(double delta)
     {
         var result = new Result();
