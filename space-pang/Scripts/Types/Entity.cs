@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace SpacePang.Scripts.Types;
@@ -7,10 +8,19 @@ public partial class Entity : Area2D
 {
     [Export] public Vector2 StartingPos { get; set; }
 
+    // radius in pixels?
+    [Export] public float DetectionRadius { get; set; } = 50;
+    
     [Export] public float RotateSpeed = 1f;
     [Export] public float Accel = 10f;
     [Export] public float Decel = 5f;
     [Export] public float MaxSpeed = 50f;
+
+    private Detector _detector;
+
+    public List<Entity> GetNeighbours() =>
+        _detector.GetNeighbours<Entity>();
+    
     public Vector2 InputDirection = Vector2.Zero;
     private Vector2 _currentVelocity = Vector2.Zero;
 
@@ -19,6 +29,7 @@ public partial class Entity : Area2D
     public override void _Ready()
     {
         Position = StartingPos;
+        _detector = new Detector(this, DetectionRadius);
         base._Ready();
     }
 
@@ -41,7 +52,7 @@ public partial class Entity : Area2D
         
         Position = BoundaryWrap(pos);
         //Position = BoundaryLock(pos);
-    }   
+    }
     
     private Vector2 MoveTowards(
         Vector2 current,
@@ -89,5 +100,65 @@ public partial class Entity : Area2D
             result.Y = 0;
         
         return result;
+    }
+    
+    
+}
+
+internal sealed class Detector
+{
+    private readonly CollisionShape2D _shape2d;
+    private readonly CircleShape2D _circle2d;
+
+    public float Radius
+    {
+        get => _circle2d?.Radius ?? 0;
+        set => _circle2d.Radius = _circle2d.Radius > value 
+            ? _circle2d.Radius : value;
+    }
+    
+    private readonly List<Entity> _neighbors = [];
+
+    public Detector(Entity owner, float radius = 10)
+    {
+        _circle2d = new CircleShape2D();
+        _circle2d.Radius = radius;
+
+        _shape2d = new CollisionShape2D();
+        _shape2d.Shape = _circle2d;
+        
+        owner.AddChild(_shape2d);
+        owner.AreaEntered += OnAreaEntered;
+        owner.AreaExited += OnAreaExited;
+    }
+
+    public List<T> GetNeighbours<T>() where T : Entity
+    {
+        var neighbours = new List<T>();
+
+        foreach (var neighbor in _neighbors)
+        {
+            if (neighbor is T)
+                neighbours.Add((T)neighbor);
+        }
+            
+        return neighbours;
+    }
+
+    private void OnAreaEntered(Area2D area)
+    {
+        if (area is not Entity entity)
+            return;
+        
+        if (!_neighbors.Contains(entity))
+            _neighbors.Add(entity);
+    }
+
+    private void OnAreaExited(Area2D area)
+    {
+        if (area is not Entity entity)
+            return;
+
+        _neighbors.Remove(entity);
     }
 }
