@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 
 namespace SpacePang.Scripts.Types;
@@ -95,60 +94,4 @@ public partial class Entity : Area2D
     }
     
     
-}
-
-internal sealed class Detector<T> where T : Entity
-{
-    private readonly CollisionShape2D _shape2d;
-    private readonly CircleShape2D _circle2d;
-
-    public float Radius
-    {
-        get => _circle2d?.Radius ?? 0;
-        set => _circle2d.Radius = _circle2d.Radius > value 
-            ? _circle2d.Radius : value;
-    }
-    
-    private readonly List<Entity> _neighbors = [];
-
-    public Detector(T owner, float radius = 10)
-    {
-        _circle2d = new CircleShape2D();
-        _circle2d.Radius = radius;
-
-        _shape2d = new CollisionShape2D();
-        _shape2d.Shape = _circle2d;
-        
-        owner.AddChild(_shape2d);
-        owner.AreaEntered += OnAreaEntered;
-        owner.AreaExited += OnAreaExited;
-    }
-
-    public List<Entity> GetNeighbours()
-    {
-        var neighbours = new List<Entity>();
-
-        foreach (var neighbor in _neighbors)
-        {
-            if (neighbor is T)
-                neighbours.Add(neighbor);
-        }
-            
-        return neighbours;
-    }
-
-    private void OnAreaEntered(Area2D area)
-    {
-        if (area is not T entity)
-            return;
-        
-        if (!_neighbors.Contains(entity))
-            _neighbors.Add(entity);
-    }
-
-    private void OnAreaExited(Area2D area)
-    {
-        if (area is T entity)
-            _neighbors.Remove(entity);
-    }
 }

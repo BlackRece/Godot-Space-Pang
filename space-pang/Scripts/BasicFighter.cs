@@ -43,7 +43,9 @@ public partial class BasicFighter : Entity
 
 		StartingPos = new Vector2(Area.X / 2, 50f);
 
-		_detector = new Detector<BasicFighter>(this, DetectionRadius);
+		//_detector = new Detector<BasicFighter>(this, DetectionRadius);
+		_detector = Detector<BasicFighter>.Register(this, DetectionRadius);
+		AddChild(_detector);
 		
 		// TODO: pass states in from enemy manager
 		var states = new Dictionary<FuzzyStates, float>
