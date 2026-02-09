@@ -13,7 +13,7 @@ public partial class BasicFighter : Entity
 	public List<Entity> Neighbours => _detector.GetNeighbours();
 	
 	// radius in pixels?
-	[Export] public float DetectionRadius { get; set; } = 50;
+	[Export] public float DetectionRadius { get; set; } = 100;
 	
 	private int _hitPoints = 10;
 
