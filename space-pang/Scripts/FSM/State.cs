@@ -40,11 +40,11 @@ public abstract class State<T> where T : Entity
         /// <summary>
         /// Desired Rotation
         /// </summary>
-        internal float? Rotation { get; set; } = null;
+        internal float? Rotation { get; set; }
         
         /// <summary>
         /// Desired Velocity
         /// </summary>
-        internal Vector2 Velocity { get; set; } = new();
+        internal Vector2 Velocity { get; set; } = Vector2.Zero;
     }
 }
