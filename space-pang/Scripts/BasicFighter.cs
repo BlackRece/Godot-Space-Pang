@@ -43,9 +43,12 @@ public partial class BasicFighter : Entity
 
 		StartingPos = new Vector2(Area.X / 2, 50f);
 
-		//_detector = new Detector<BasicFighter>(this, DetectionRadius);
+		/* Flocking: required setup */
 		_detector = Detector<BasicFighter>.Register(this, DetectionRadius);
 		AddChild(_detector);
+
+		InputDirection = Vector2.Down;
+		/* !Flocking */
 		
 		// TODO: pass states in from enemy manager
 		var states = new Dictionary<FuzzyStates, float>
