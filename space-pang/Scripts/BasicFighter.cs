@@ -39,7 +39,7 @@ public partial class BasicFighter : Entity
 		// TODO: pass in stats from enemy manager
 		Accel = 5f;
 		Decel = 1f;
-		MaxSpeed = 10f;
+		MaxSpeed = 5f;
 
 		StartingPos = new Vector2(Area.X / 2, 50f);
 
