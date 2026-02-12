@@ -15,6 +15,8 @@ public partial class BasicFighter : Entity
 	// radius in pixels?
 	[Export] public float DetectionRadius { get; set; } = 100;
 	
+    [Signal] public delegate void DeathEventHandler(BasicFighter agent);
+	
 	private int _hitPoints = 10;
 
 	private int HitPoints
@@ -26,6 +28,7 @@ public partial class BasicFighter : Entity
 			if (_hitPoints <= 0)
 			{
 				// send signal/event to say i'm dead!
+				EmitSignal(nameof(DeathEventHandler), this);
 				this.QueueFree();
 			}
 		}
@@ -37,9 +40,9 @@ public partial class BasicFighter : Entity
 	public override void _Ready()
 	{
 		// TODO: pass in stats from enemy manager
-		Accel = 5f;
-		Decel = 1f;
-		MaxSpeed = 5f;
+		Accel = 1f;
+		Decel = 0.5f;
+		MaxSpeed = 2.5f;
 
 		StartingPos = new Vector2(Area.X / 2, 50f);
 
