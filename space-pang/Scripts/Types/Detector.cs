@@ -5,6 +5,8 @@ namespace SpacePang.Scripts.Types;
 
 public partial class Detector<T> : Area2D where T : Entity
 {
+    private const bool DEBUG = true;
+    
     public CollisionShape2D Shape2d { get; set; }
     private CircleShape2D _circle2d;
 
@@ -20,7 +22,27 @@ public partial class Detector<T> : Area2D where T : Entity
     public static Detector<T> Register(T owner, float radius = 10)
     {
         var detector = new Detector<T>();
+
+        if (DEBUG)
+        {
+            // Add visible transparent circle
+            var polygon = new Polygon2D();
+            polygon.Color = new Color(1, 1, 1, 0.3f); // White with 30% opacity
+
+            // Generate circle points
+            var points = new Vector2[32];
+            for (int i = 0; i < 32; i++)
+            {
+                float angle = (float)(i / 32.0 * Mathf.Tau);
+                points[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            }
+
+            polygon.Polygon = points;
+
+            detector.AddChild(polygon);
+        }
         
+
         var circle2d = new CircleShape2D();
         circle2d.Radius = radius;
 
