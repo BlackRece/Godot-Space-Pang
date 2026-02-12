@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Godot;
 using SpacePang.Scripts.Types;
 
@@ -8,6 +9,7 @@ namespace SpacePang.Scripts
 	{
 		private Timer _timer;
 		private Label _score;
+		private RichTextLabel _debug;
 		private MinMaxValue<int> _counter = new MinMaxValue<int>(0, 10, 5);
 
 		private EnemyLibrary _lib;
@@ -20,6 +22,7 @@ namespace SpacePang.Scripts
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
+			_debug = GetNode<RichTextLabel>("DebugLabel");
 			_score = GetNode<Label>("ScoreLabel");
 			if (_score == null)
 			{
@@ -48,6 +51,12 @@ namespace SpacePang.Scripts
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
+			var enemyStats = new StringBuilder();
+			foreach (Entity enemy in _enemies)
+			{
+				enemyStats.AppendLine($"{enemy.Position}");
+			}
+			_debug.Text = enemyStats.ToString();
 			_score.Text = $"[Time: {_counter.Current}] " +
 			              $"[Enemies: {_enemies.Count}/{_enemiesSpawned}] " +
 			              $"[SpawnPos: {_enemySpawnPos}]";

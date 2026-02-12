@@ -50,7 +50,7 @@ public partial class BasicFighter : Entity
 		_detector = Detector<BasicFighter>.Register(this, DetectionRadius);
 		AddChild(_detector);
 
-		InputDirection = Vector2.Down;
+		InputDirection = Vector2.Left;
 		/* !Flocking */
 		
 		// TODO: pass states in from enemy manager
@@ -74,9 +74,11 @@ public partial class BasicFighter : Entity
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		/*
 		if(_hitPoints < 0)
 			QueueFree();
-		;
+		*/
+		
 		var result = _fsm.Update(delta);
 
 		if (result is not null)
